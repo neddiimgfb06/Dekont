@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dekont</title>
+  <style>
+    :root { --bg:#0f1115; --fg:#eaeaea; --muted:#8b8b8b; --accent:#4f46e5; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 70% -10%, #1a1d25, #0f1115);
+      color: var(--fg);
+      display: grid;
+      place-items: center;
+    }
+
+    .card {
+      width: min(520px, 92vw);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      text-align: center;
+      backdrop-filter: blur(6px);
+    }
+    h1 { margin: 0 0 6px; font-size: 28px; font-weight: 800; letter-spacing: .2px; }
+    p { margin: 0 0 18px; color: var(--muted); }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      background: var(--accent);
+      color: white;
+      padding: 14px 20px;
+      border-radius: 16px;
+      font-weight: 700;
+      transition: transform .06s ease, box-shadow .2s ease, filter .2s ease;
+      box-shadow: 0 8px 24px rgba(79,70,229,.35);
+      user-select: none;
+    }
+    .btn:active { transform: translateY(1px) scale(0.99); filter: brightness(.95); }
+
+    /* Overlay */
+    .overlay {
+      position: fixed; inset: 0;
+      display: grid; place-items: center;
+      background: rgba(0,0,0,.65);
+      visibility: hidden; opacity: 0;
+      transition: opacity .25s ease, visibility 0s linear .25s;
+      text-align: center;
+    }
+    .overlay.show {
+      visibility: visible; opacity: 1; transition: opacity .25s ease;
+    }
+
+    .finger {
+      font-size: 18vmin; line-height: 1;
+      transform: scale(.8);
+      filter: drop-shadow(0 10px 25px rgba(0,0,0,.55));
+      transition: transform .22s cubic-bezier(.2,.7,.2,1.2);
+    }
+    .overlay.show .finger { transform: scale(1); }
+
+    .message {
+      font-size: 3vmin;
+      font-weight: 900;
+      margin-top: 10px;
+      color: red;
+      text-shadow: 0 3px 6px rgba(0,0,0,0.6);
+    }
+
+    .hint { margin-top: 10px; font-size: 12px; color: #a1a1a1; }
+    .close {
+      position: absolute; top: 18px; right: 18px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.18);
+      color: #fff; border-radius: 12px;
+      padding: 8px 10px; cursor: pointer; font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <h1>Dekont görüntülemek için tıkla</h1>
+    <p></p>
+    <a id="boom" href="#" class="btn" aria-controls="gesture" aria-expanded="false">Tıkla</a>
+    <div class="hint"></div>
+  </main>
+
+  <!-- Overlay + içerik -->
+  <div id="gesture" class="overlay" role="dialog" aria-modal="true" aria-label="Sürpriz">
+    <button class="close" type="button" aria-label="Kapat">×</button>
+    <div>
+      <div class="finger" aria-hidden="true">🖕</div>
+      <div class="message">OROSPU ÇOCUĞU SENIN ANANIN AMINI YOLUNU YORDAMINI SİKEYIM O ANNENI GÖZÜNÜN ÖNÜNDE SİKİP BOŞALAYIM PİÇ HATTA ANNENI SANA SİKTİRİCEM OÇ</div>
+    </div>
+  </div>
+
+  <script>
+    const link = document.getElementById('boom');
+    const overlay = document.getElementById('gesture');
+    const closeBtn = overlay.querySelector('.close');
+
+    function showOverlay() {
+      overlay.classList.add('show');
+      link.setAttribute('aria-expanded', 'true');
+    }
+    function hideOverlay() {
+      overlay.classList.remove('show');
+      link.setAttribute('aria-expanded', 'false');
+    }
+
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      showOverlay();
+    });
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target === closeBtn) hideOverlay();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('show')) hideOverlay();
+    });
+  </script>
+
+  <noscript>Bu sürpriz için JavaScript gerekli 🙂</noscript>
+</body>
+</html>
